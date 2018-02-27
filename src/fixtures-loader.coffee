@@ -39,6 +39,15 @@ module.exports =
 
   purgeModel: (model) ->
     new Promise (resolve, reject) ->
+      if model.dataSource == null
+        console.log('No data source defined, skipping...')
+        return resolve()
+      if typeof model.dataSource.adapter.settings == 'undefined'
+        console.log('Data source without settings, skipping...')
+        return resolve()
+      if model.dataSource.adapter.settings.connector == 'remote-connector'
+        console.log('Remote connected model, skipping...')
+        return resolve()
       if model.destroyAll
         model.destroyAll (err) ->
           reject err if err
