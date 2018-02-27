@@ -8,12 +8,16 @@ module.exports = (app, options) ->
     autoLoad: false
   , options
 
+  logError = (err) ->
+    console.log('Error:', err)
+
   loadFixtures = ->
     if not options.append
       fixtureLoader.purgeDatabase app.models
       .then ->
         console.log 'Data purged'
         fixtureLoader.loadFixtures app.models, options.fixturePath
+      .catch logError
     else
       fixtureLoader.loadFixtures app.models, options.fixturePath
 
