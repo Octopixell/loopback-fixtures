@@ -39,9 +39,10 @@ module.exports =
 
   purgeModel: (model) ->
     new Promise (resolve, reject) ->
-      model.destroyAll (err) ->
-        reject err if err
-        resolve()
+      if model.destroyAll
+        model.destroyAll (err) ->
+          reject err if err
+          resolve()
 
 
   getRandomMatchingObject: (pattern) ->
