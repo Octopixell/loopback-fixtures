@@ -3,7 +3,7 @@
 Expressive fixtures generator for Loopback
 
 [![Build Status](https://travis-ci.org/Octopixell/loopback-fixtures.svg?branch=master)](https://travis-ci.org/Octopixell/loopback-fixtures)
-[![dependencies Status](https://david-dm.org/sghribi/loopback-fixtures/status.svg)](https://david-dm.org/sghribi/loopback-fixtures)
+[![dependencies Status](https://david-dm.org/octopixell/loopback-fixtures/status.svg)](https://david-dm.org/octopixell/loopback-fixtures)
 
 ## Installation
 
