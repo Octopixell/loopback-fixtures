@@ -37,7 +37,6 @@ gulp.task 'test', ->
   gulp.src './test/{,**}/*.{json,coffee}', read: false
   .pipe plumber()
   .pipe mocha
-    compilers: 'coffee:coffee-script'
     require: [
       'coffee-script/register'
     ]
