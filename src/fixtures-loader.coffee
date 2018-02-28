@@ -65,7 +65,7 @@ module.exports =
     new Promise (resolve, reject) =>
       _.each object, (value, key) =>
         # Find matches in our format @{object.key}
-        regex = /@\{([a-zA-Z0-9]*)\.*(\S*)\}/g
+        regex = /@\{([a-zA-Z0-9_]*)\.*(\S*)\}/g
         matches = regex.exec(value)
         # Resolve if there's no matches
         if matches == null || matches.length < 2
@@ -90,10 +90,16 @@ module.exports =
           # replace the match string with the value found in the
           # referenced object
           if referencedObject?[property]
-            object[key] = object[key].replace(
-              matches[0],
-              referencedObject[property]
-            )
+            # If the value begins with @ override the whole key
+            # in the object, which allows keeping the type equal
+            if _.values(value)?[0] == '@'
+              object[key] = referencedObject[property]
+            # If not, this is composite string so make a string replace
+            else
+              object[key] = object[key].replace(
+                matches[0],
+                referencedObject[property]
+              )
           # There was no matching values, return an error
           else
             error = 'No value found for '+identifier+'.'+property

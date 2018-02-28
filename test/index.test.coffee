@@ -51,12 +51,12 @@ describe 'loopback-fixtures', ->
   describe 'replaceReferenceInObjects method', ->
 
     describe 'should call replaceReferenceInObjects with the right parameters', ->
-
       beforeEach (done) ->
         fixtureLoader.savedData =
           group_yellow: id: 1
           group_red: id: 2
-          user: groupId: '@group_yellow'
+          user: groupId: '@{group_yellow}'
+          composite: id: 'custom_id_@{group_yellow}'
         done()
 
       beforeEach (done) ->
@@ -71,17 +71,22 @@ describe 'loopback-fixtures', ->
         .then ->
           expect(fixtureLoader.getRandomMatchingObject).to.have.been.calledWith '^group_yellow$'
 
-      it 'and remplace reference key', () ->
+      it 'and replace reference key', () ->
         fixtureLoader.replaceReferenceInObjects fixtureLoader.savedData.user
         .then ->
           expect(fixtureLoader.savedData.user.groupId).to.eql 1
+
+      it 'and create composite reference key', () ->
+        fixtureLoader.replaceReferenceInObjects fixtureLoader.savedData.composite
+        .then ->
+          expect(fixtureLoader.savedData.composite.id).to.eql 'custom_id_1'
 
     describe 'should call replaceReferenceInObjects with the right parameters', ->
       beforeEach (done) ->
         fixtureLoader.savedData =
           group_yellow: id: 1
           group_red: id: 2
-          user: groupId: '@group_blue'
+          user: groupId: '@{group_blue}'
         done()
 
       beforeEach (done) ->
