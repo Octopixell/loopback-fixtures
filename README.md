@@ -31,12 +31,12 @@ Write your YML fixture file `/fixture/data/data.yml` (adapt according your model
 ``` yaml
 Group:
   group{1..10}:
-    name: "Groupe {@} depuis les fixtures"
+    name: "Groupe {#} depuis les fixtures"
 
 User:
   user{1..10}:
-    name: "User {@} : {{name.lastName}}"
-    groupId: @group{@}
+    name: "User {#} : {{name.lastName}}"
+    groupId: @{group{#}}
     email: "{{internet.email}}"
     birthDate: "2016-01-01"
     favoriteNumber: "(function() { return Math.round(Math.random()*1000);})()"
@@ -91,37 +91,39 @@ User:
     ``` yaml
     User:
       user{1..45}:
-        name: "User number {@}"
+        name: "User number {#}"
     ```
 
-    `{@}` represents the current identifier for the generator
+    `{#}` represents the current identifier for the generator
 
  - References :
 
      ``` yaml
      Group:
        group{1..3}:
-         name: "Groupe number {@}"
+         name: "Groupe number {#}"
 
      User:
        user{1..9}:
-         name: "User number {@}"
-         group: @group1  # Reference to group1
+         name: "User number {#}"
+         group: @{group1}  # Reference to group1
+         owner: @{group1.owner} # Reference the owner of group1
 
        user{10..19}:
-         name: "User number {@}"
-         group: @group.* # Reference to any matching group
+         name: "User number {#}"
+         group: @{group.*} # Reference to any random matching group
      ```
 
-     `@group1` represents the reference for the group1 and can be used in other fixtures
-     `@group.*` represents the reference for a **random** matching group
+     `@{group1}` represents the reference for `group1` and can be used in other fixtures
+     `@{group1.name}` represents the reference for the property `name` within `group1` and can be used in other fixtures
+     `@{group.*}` represents the reference for a **random** matching group and can be used in other fixtures
 
  - Fakers :
 
     ``` yaml
     User:
       user{1..10}:
-        name: "User n°{@} : {{name.lastName}} {{name.firstName}}"
+        name: "User n°{#} : {{name.lastName}} {{name.firstName}}"
         email: "{{internet.email}}"
     ```
 

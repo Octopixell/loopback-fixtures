@@ -63,17 +63,42 @@ module.exports =
 
   replaceReferenceInObjects: (object) ->
     new Promise (resolve, reject) =>
-
       _.each object, (value, key) =>
-        if _.values(value)?[0] == '@'
-          identifier = value.substring 1
-          referencedObject = @getRandomMatchingObject "^"+identifier+"$"
-
-          if referencedObject?[idKey]
-            object[key] = referencedObject[idKey]
+        # Find matches in our format @{object.key}
+        regex = /@\{([a-zA-Z0-9]*)\.*(\S*)\}/g
+        matches = regex.exec(value)
+        # Resolve if there's no matches
+        if matches == null || matches.length < 2
+          return resolve object
+        # If we find matches, get our reference
+        if matches.length > 2
+          identifier = matches[1]
+          property = matches[2]
+          pattern = '^' + identifier
+          # If the property is * grab a random identifier based on
+          # the identifier string like /^identifier/ otherwise do
+          # /^identifier$/ which would be a perfect match
+          if property != '*'
+            pattern = pattern + '$'
+          # Get the referenced object
+          referencedObject = @getRandomMatchingObject pattern
+          # Set the default id key if no second match was found
+          # like @{object} so no key was defined in the reference
+          if property == '' || property == '*'
+            property = idKey
+          # Check if the referenced object and key exist and if so,
+          # replace the match string with the value found in the
+          # referenced object
+          if referencedObject?[property]
+            object[key] = object[key].replace(
+              matches[0],
+              referencedObject[property]
+            )
+          # There was no matching values, return an error
           else
-            reject '[ERROR] Please provide object for @' + identifier
-
+            error = 'No value found for '+identifier+'.'+property
+            return reject new Error(error)
+      # Function done, resolve object
       resolve object
 
 
@@ -93,10 +118,10 @@ module.exports =
         # Duplicate object ...
         for i in [min..max]
           expandedData[identifier + i] = _.clone object
-          # ... and replace {@} occurences
+          # ... and replace all {#} occurences
           _.each object, (value, key) ->
             if typeof value is 'string'
-              newValue = value.replace '{@}', i.toString()
+              newValue = value.replace /\{#\}/g, i.toString()
             else
               newValue = value
             expandedData[identifier + i][key] = newValue
