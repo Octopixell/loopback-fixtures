@@ -100,3 +100,17 @@ describe 'loopback-fixtures', ->
         fixtureLoader.replaceReferenceInObjects fixtureLoader.savedData.user
         .catch ->
           new Error 'it should not be called'
+
+  describe 'executeJsonParser method', ->
+    beforeEach (done) ->
+      fixtureLoader.savedData =
+        group_yellow: id: 1
+        group_red: id: 2
+        user: groupId: '@{group_yellow}'
+        composite: id: 'custom_id_@{group_yellow}'
+        json: value: '{"type":"webhook","url":"https://secure.v2.taxiid.nl/v2/dispatchapi/webhook"}'
+      done()
+
+    it 'should return a JSON object for JSON strings', () ->
+      data = fixtureLoader.executeJsonParser fixtureLoader.savedData
+      expect(data.json).to.be.an('object')

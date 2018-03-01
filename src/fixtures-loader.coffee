@@ -157,6 +157,16 @@ module.exports =
     return data
 
 
+  executeJsonParser: (data) ->
+    regex = /(\{.*\:.*\})/g
+    _.each data, (object, identifier) ->
+      _.each object, (value, key) ->
+        matches = regex.exec(value)
+        if matches != null
+          data[identifier][key] = JSON.parse(matches[1])
+    return data
+
+
   applyHelpers: (data) ->
     # Repeat "identifier{a..b}"
     expandedData = @executeGenerators data
@@ -164,6 +174,8 @@ module.exports =
     expandedData = @executeFaker expandedData
     # Exec function
     expandedData = @executeFunctions expandedData
+    # Exec JSON parse
+    expandedData = @executeJsonParser expandedData
     return expandedData
 
 
