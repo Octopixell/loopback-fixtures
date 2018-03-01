@@ -65,7 +65,7 @@ User:
  - With a node command:
 
     ```
-    ./node_modules/loopback-fixtures/lib/load-fixtures.js
+    node ./node_modules/loopback-fixtures/lib/load-fixtures.js
     ```
 
 ### Configuration options
@@ -117,6 +117,14 @@ User:
      `@{group1}` represents the reference for `group1` and can be used in other fixtures
      `@{group1.name}` represents the reference for the property `name` within `group1` and can be used in other fixtures
      `@{group.*}` represents the reference for a **random** matching group and can be used in other fixtures
+
+ - JSON
+ 
+    ``` yaml
+    User:
+      userWithJson:
+        data: '{"key":"value","key2":"value2"}'
+     ```
 
  - Fakers :
 
