@@ -9,8 +9,10 @@ Expressive fixtures generator for Loopback
 
 ### Basic usage
 
+Add the following entry to your `package.json`:
+
 ```
-npm install --save loopback-fixtures
+"loopback-fixtures": "git://github.com/Octopixell/loopback-fixtures.git"
 ```
 
 Then, in your `server/component-config.json`, add :
@@ -74,7 +76,7 @@ User:
 
     The directory to load data fixtures from
 
- - `append` (default value `false`)
+ - `append` (default value `true`)
 
     If set to `true`, data fixtures will be append instead of deleting all data from the database first.
     **WARNING** `false` will erase your database
@@ -142,7 +144,7 @@ User:
     ``` yaml
     User:
       user{1..10}:
-        favoriteNumber: "(function() { return Math.round(Math.random()*1000);})()"
+        favoriteNumber: "(function() { return Math.round(Math.random()*1000); })()"
     ```
 
     You can use custom functions too
@@ -150,7 +152,7 @@ User:
 
 
 ## Credits
-[Samy Ghribi](https://github.com/sghribi)
+[Samy Ghribi](https://github.com/sghribi) - For creating the initial version of this [LoopBack](https://loopback.io/) [component](https://loopback.io/doc/en/lb3/Creating-components.html). Thanks Samy!
 
 ## License
 
