@@ -11,6 +11,9 @@ module.exports =
 
   savedData: {}
 
+  logError: (err) ->
+    console.log('Error:', err)
+
   loadFixtures: (models, fixturesPath) ->
     # Get all yml files
     fixturePath = path.join process.cwd(), fixturesPath
@@ -198,3 +201,4 @@ module.exports =
           @savedData[fixture.identifier] = savedObject
           console.log "[#{modelData.name}] - #{fixture.identifier} " +
                       "imported (id : #{savedObject?[idKey]})"
+        .catch @logError
