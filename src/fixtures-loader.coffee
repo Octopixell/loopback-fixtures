@@ -166,7 +166,10 @@ module.exports =
       _.each object, (value, key) ->
         matches = regex.exec(value)
         if matches != null
-          data[identifier][key] = JSON.parse(matches[1])
+          try
+            data[identifier][key] = JSON.parse(value)
+          catch error
+            console.log('Error parsing JSON:', error)
     return data
 
 
