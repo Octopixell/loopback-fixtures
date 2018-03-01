@@ -4,7 +4,7 @@ merge = require 'merge'
 module.exports = (app, options) ->
   options = merge
     fixturePath: '/fixtures/data/'
-    append: false
+    append: true
     autoLoad: false
   , options
 
